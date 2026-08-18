@@ -28,3 +28,5 @@ venv/
 *.har
 *.db
 *.sqlite
+_git/
+.git/
