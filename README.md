@@ -1,10 +1,14 @@
+<div align="right">
+
+![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)
+
+</div>
+
 # awesome-api-shape-explorer
 
 > Analyze Python API surfaces via AST introspection. Zero runtime execution. Safe for untrusted code.
-
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## What It Does
 
@@ -16,6 +20,22 @@ You inherit a 50K-line codebase. You need to know:
 
 `api-shape-explorer` answers all of this in seconds without executing a single line.
 
+## Pipeline
+
+```mermaid
+flowchart LR
+    T[target .py / dir] --> P[parse: ast module]
+    P --> F[FunctionShape]
+    P --> C[ClassShape]
+    P --> M[ModuleShape]
+    F & C & M --> E[ShapeExplorer.explore]
+    E --> J[report: json]
+    E --> D[report: markdown]
+    J --> CLI[CLI / CI pipelines]
+    D --> DOC[API.md docs]
+```
+
+---
 ## Install
 
 ```bash
@@ -123,6 +143,11 @@ api-shape-explorer my_module.py
 python3 -m pytest tests/ -v
 ```
 
+## Security
+
+Pure-AST analysis is the security story: `api-shape-explorer` never imports or executes the code it analyzes, so it is safe to point at untrusted third-party sources when auditing dependency surface area. The one boundary to respect is the report output itself — treat generated JSON/markdown as data, not as code to execute.
+
+---
 ## License
 
 MIT
